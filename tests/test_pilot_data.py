@@ -28,6 +28,15 @@ def test_normalisation_keeps_supporting_metadata_outside_evidence() -> None:
     assert "Lab A" not in example.evidence[0].source_document_id
 
 
+def test_normalisation_preserves_ids_when_context_has_empty_sentence_slot() -> None:
+    row = _hotpot_like_row()
+    row["context"]["sentences"][0] = ["Ada worked at Lab A.", "", "Ada was a scientist."]
+    row["supporting_facts"] = {"title": ["Ada"], "sent_id": [2]}
+    example = normalise_hotpot_row(row, seed=3, revision="test")
+    assert example.evidence[0].sentence_ids == (0, 2)
+    assert example.evidence[0].sentence_texts == ("Ada worked at Lab A.", "Ada was a scientist.")
+
+
 def test_json_roundtrip_and_pilot_variants(tmp_path) -> None:
     original = normalise_hotpot_row(_hotpot_like_row(), seed=3, revision="test")
     processed = tmp_path / "processed"

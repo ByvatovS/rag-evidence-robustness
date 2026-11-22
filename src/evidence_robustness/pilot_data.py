@@ -65,16 +65,21 @@ def normalise_hotpot_row(row: dict[str, Any], *, seed: int, revision: str) -> Ev
     question_id = str(row["id"])
     passages: list[EvidencePassage] = []
     for position, (title, sentences) in enumerate(_context_pairs(row["context"])):
-        if not sentences:
+        # HotpotQA occasionally has an empty sentence slot. Preserve original sentence
+        # indices for supporting-fact provenance while excluding empty text from a
+        # passage contract that rightly forbids empty sentences.
+        indexed_sentences = [(index, sentence.strip()) for index, sentence in enumerate(sentences) if sentence.strip()]
+        if not indexed_sentences:
             continue
+        sentence_ids, sentence_texts = zip(*indexed_sentences, strict=True)
         passages.append(
             EvidencePassage(
                 passage_id=f"{question_id}::doc{position}",
                 source_document_id=title,
                 source_title=title,
-                text=" ".join(sentences),
-                sentence_ids=tuple(range(len(sentences))),
-                sentence_texts=tuple(sentences),
+                text=" ".join(sentence_texts),
+                sentence_ids=tuple(sentence_ids),
+                sentence_texts=tuple(sentence_texts),
             )
         )
     if not passages:
