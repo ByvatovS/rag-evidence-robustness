@@ -1,0 +1,7 @@
+seed: 20261122
+examples: 10
+safe_transformations:
+  - permute
+  - duplicate
+  - resegment
+device: cpu

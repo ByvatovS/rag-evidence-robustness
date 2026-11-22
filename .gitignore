@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Experiment artefacts and data are versioned through manifests, not Git.
+data/
+runs/
+artifacts/
+models/
+features/
+reports/figures/*.png
+reports/tables/*.csv
+
+# Secrets and notebooks' local checkpoints
+.env
+*.key
+.ipynb_checkpoints/

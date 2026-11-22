@@ -1,0 +1,6 @@
+# Placeholder only. Freeze this file after the pilot protocol and dev choices are set.
+extends: pilot.yaml
+dataset:
+  max_original_questions: null
+runtime:
+  nli_budget: 0

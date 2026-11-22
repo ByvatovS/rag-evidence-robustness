@@ -1,0 +1,21 @@
+# Stage-2/3 pilot contract. Values are deliberately conservative and must be frozen
+# before held-out evaluation, not tuned on test data.
+seed: 20261122
+dataset:
+  name: hotpotqa/hotpot_qa
+  config: distractor
+  revision: null  # Replace with an immutable revision/hash after download.
+  max_original_questions: 200
+splits:
+  train: 0.60
+  dev: 0.20
+  test: 0.20
+transformations:
+  safe: [permute, duplicate, resegment]
+  content_changing: [remove_gold, inject_conflict]
+evaluation:
+  primary_metrics: [macro_f1, flip_rate_safe, recall_harmful, latency_ms, nli_calls]
+  bootstrap_resamples: 2000
+runtime:
+  device: cpu
+  nli_budget: 0
